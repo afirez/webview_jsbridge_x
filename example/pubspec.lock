@@ -81,13 +81,6 @@ packages:
       url: "https://pub.flutter-io.cn"
     source: hosted
     version: "0.12.11"
-  material_color_utilities:
-    dependency: transitive
-    description:
-      name: material_color_utilities
-      url: "https://pub.flutter-io.cn"
-    source: hosted
-    version: "0.1.3"
   meta:
     dependency: transitive
     description:
@@ -162,7 +155,7 @@ packages:
       name: test_api
       url: "https://pub.flutter-io.cn"
     source: hosted
-    version: "0.4.8"
+    version: "0.4.3"
   typed_data:
     dependency: transitive
     description:
@@ -205,6 +198,13 @@ packages:
       url: "https://pub.flutter-io.cn"
     source: hosted
     version: "2.7.1"
+  webview_flutter_x5:
+    dependency: transitive
+    description:
+      name: webview_flutter_x5
+      url: "https://pub.flutter-io.cn"
+    source: hosted
+    version: "2.0.8+9"
   webview_jsbridge_x:
     dependency: "direct main"
     description:

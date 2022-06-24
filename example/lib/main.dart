@@ -3,8 +3,10 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:local_assets_server/local_assets_server.dart';
-import 'package:webview_flutter/webview_flutter.dart';
-import 'package:webview_jsbridge_x/webview_jsbridge_x.dart';
+// import 'package:webview_flutter/webview_flutter.dart';
+// import 'package:webview_jsbridge_x/webview_jsbridge_x.dart';
+import 'package:webview_flutter_x5/webview_flutter.dart';
+import 'package:webview_jsbridge_x/webview_jsbridge_x_x5.dart';
 
 void main() {
   runApp(MyApp());
