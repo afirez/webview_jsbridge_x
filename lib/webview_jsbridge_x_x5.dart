@@ -4,7 +4,7 @@ import 'dart:async';
 import 'dart:convert';
 
 import 'package:flutter/services.dart';
-import 'package:webview_flutter/webview_flutter.dart';
+import 'package:webview_flutter_x5/webview_flutter.dart';
 import 'package:webview_jsbridge_x/js_script.dart';
 
 typedef Future<T?> WebViewJSBridgeXHandler<T extends Object?>(Object? data);
@@ -27,7 +27,7 @@ class WebViewJSBridgeX {
           onMessageReceived: _onMessageReceived,
         ),
       };
-  
+      
   bool handleUrl(String url) {
     return url.contains(jsBridgehost); 
   }
@@ -38,9 +38,9 @@ class WebViewJSBridgeX {
     //     esVersion == WebViewXInjectJsVersion.es5 ? 'default' : 'async';
     // final jsPath = 'packages/webview_jsbridge_x/assets/$jsVersion.js';
     // final jsFile = await rootBundle.loadString(jsPath);
-     final js =
+    final js =
         esVersion == WebViewXInjectJsVersion.es5 ? defaultjs : asyncjs;
-    controller?.runJavascript(js);
+    controller?.evaluateJavascript(js);
   }
 
   void registerHandler(String handlerName, WebViewJSBridgeXHandler handler) {
@@ -143,6 +143,6 @@ class WebViewJSBridgeX {
     final jsonStr = jsonEncode(jsonData);
     final encodeStr = Uri.encodeFull(jsonStr);
     final script = 'WebViewJavascriptBridge.nativeCall("$encodeStr")';
-    controller?.runJavascript(script);
+    controller?.evaluateJavascript(script);
   }
 }

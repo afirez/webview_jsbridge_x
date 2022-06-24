@@ -3,8 +3,8 @@ library webview_jsbridge_x;
 import 'dart:async';
 import 'dart:convert';
 
-import 'package:flutter/services.dart';
-import 'package:webview_flutter/webview_flutter.dart';
+// import 'package:flutter/services.dart';
+// import 'package:webview_flutter_x5/webview_flutter.dart';
 import 'package:webview_jsbridge_x/js_script.dart';
 
 typedef Future<T?> WebViewJSBridgeXHandler<T extends Object?>(Object? data);
@@ -12,7 +12,8 @@ typedef Future<T?> WebViewJSBridgeXHandler<T extends Object?>(Object? data);
 enum WebViewXInjectJsVersion { es5, es7 }
 
 class WebViewJSBridgeX {
-  WebViewController? controller;
+  // WebViewController? controller;
+  Future<String> Function(String javascriptString)? evaluateJS;
   String jsBridgeName = "YGFlutterJSBridgeChannel";
   String jsBridgehost = "__bridge_loaded__";
 
@@ -21,13 +22,13 @@ class WebViewJSBridgeX {
   final _handlers = <String, WebViewJSBridgeXHandler>{};
   WebViewJSBridgeXHandler? defaultHandler;
 
-  Set<JavascriptChannel> get jsChannels => <JavascriptChannel>{
-        JavascriptChannel(
-          name: 'YGFlutterJSBridgeChannel',
-          onMessageReceived: _onMessageReceived,
-        ),
-      };
-  
+  // Set<JavascriptChannel> get jsChannels => <JavascriptChannel>{
+  //       JavascriptChannel(
+  //         name: 'YGFlutterJSBridgeChannel',
+  //         onMessageReceived: _onMessageReceived,
+  //       ),
+  //     };
+
   bool handleUrl(String url) {
     return url.contains(jsBridgehost); 
   }
@@ -38,9 +39,10 @@ class WebViewJSBridgeX {
     //     esVersion == WebViewXInjectJsVersion.es5 ? 'default' : 'async';
     // final jsPath = 'packages/webview_jsbridge_x/assets/$jsVersion.js';
     // final jsFile = await rootBundle.loadString(jsPath);
-     final js =
+    final js =
         esVersion == WebViewXInjectJsVersion.es5 ? defaultjs : asyncjs;
-    controller?.runJavascript(js);
+    // controller?.evaluateJavascript(js);
+    evaluateJavascript(js);
   }
 
   void registerHandler(String handlerName, WebViewJSBridgeXHandler handler) {
@@ -51,8 +53,25 @@ class WebViewJSBridgeX {
     _handlers.remove(handlerName);
   }
 
-  void _onMessageReceived(JavascriptMessage message) {
-    final decodeStr = Uri.decodeFull(message.message);
+  // void _onMessageReceived(JavascriptMessage message) {
+  //   final decodeStr = Uri.decodeFull(message.message);
+  //   final jsonData = jsonDecode(decodeStr);
+  //   final String type = jsonData['type'];
+  //   switch (type) {
+  //     case 'request':
+  //       _jsCall(jsonData);
+  //       break;
+  //     case 'response':
+  //     case 'error':
+  //       _nativeCallResponse(jsonData);
+  //       break;
+  //     default:
+  //       break;
+  //   }
+  // }
+
+   void onMessageReceived(String message) {
+    final decodeStr = Uri.decodeFull(message);
     final jsonData = jsonDecode(decodeStr);
     final String type = jsonData['type'];
     switch (type) {
@@ -107,6 +126,10 @@ class WebViewJSBridgeX {
     return _nativeCall<T>(data: data);
   }
 
+  Future<String> evaluateJavascript(String js) async{
+    return await evaluateJS?.call(js) ?? "";
+  }
+
   Future<T?> _nativeCall<T extends Object?>(
       {String? handlerName, Object? data}) async {
     final jsonData = {
@@ -143,6 +166,7 @@ class WebViewJSBridgeX {
     final jsonStr = jsonEncode(jsonData);
     final encodeStr = Uri.encodeFull(jsonStr);
     final script = 'WebViewJavascriptBridge.nativeCall("$encodeStr")';
-    controller?.runJavascript(script);
+    // controller?.evaluateJavascript(script);
+    evaluateJavascript(script);
   }
 }
